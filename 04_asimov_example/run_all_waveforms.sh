@@ -19,8 +19,6 @@ asimov configuration update pipelines/environment /cvmfs/oasis.opensciencegrid.o
 asimov configuration update pesummary/executable /cvmfs/oasis.opensciencegrid.org/ligo/sw/conda/envs/igwn-py39-testing/bin/summarypages
 asimov configuration update general/webroot /home/${USER}/public_html/asimov-demo/$codename/$analysisname
 
-cp ../../setup.sh .
-source setup.sh
 sed -i '/^\[general\]/a osg = True' .asimov/asimov.conf
 export SINGULARITY_RIFT_IMAGE='/cvmfs/singularity.opensciencegrid.org/james-clark/research-projects-rit/rift:test'
 

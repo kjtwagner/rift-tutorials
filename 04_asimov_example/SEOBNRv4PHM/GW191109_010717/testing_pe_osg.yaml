@@ -1,0 +1,66 @@
+kind: configuration
+pipelines:
+    bayeswave:
+        quality:
+            state vector:
+                H1: H1:DCS-CALIB_STRAIN_CLEAN_SUB60HZ_C01_T1700406_v4
+                L1: L1:DCS-CALIB_STRAIN_CLEAN_SUB60HZ_C01_T1700406_v4
+                V1: V1:Hrec_hoft_16384Hz
+        likelihood:
+            iterations: 100000
+            chains: 20
+            threads: 4
+        scheduler:
+            copy frames: true
+            accounting group: ligo.dev.o4.cbc.pe.rift
+            request memory: 1024
+            request disk: 3000000
+            request post memory: 16384
+            osg: true
+    rift:
+        scheduler:
+            osg: true
+            accounting group: ligo.dev.o4.cbc.pe.rift
+            request memory: 1000000
+            request disk: 1G
+            singularity image: /cvmfs/singularity.opensciencegrid.org/james-clark/research-projects-rit/rift:test
+            singularity base exe directory: /usr/local/bin/
+            gpu architectures:
+            - Tesla K10.G1.8GB
+            - Tesla K10.G2.8GB
+            avoid hosts:
+            - qa-rtx6k-030.crc.nd.edu
+            - qa-rtx6k-029.crc.nd.edu
+            - qa-rtx6k-026.crc.nd.edu
+            - qa-rtx6k-036.crc.nd.edu
+            - node2231.cluster.ldas.cit
+            - node2236.cluster.ldas.cit
+            - node2237.cluster.ldas.cit
+            - qa-v100-010.crc.nd.edu
+            - deepclean.ldas.cit
+        sampler:
+            cip:
+                fitting method: rf
+                sampling method: AV
+                explode jobs auto: true
+            ile:
+                n eff: 1000
+                ile sampling method: AV
+                jobs per worker: 50
+                request disk: 1G
+postprocessing:
+    pesummary:
+        accounting group: ligo.dev.o4.cbc.pe.rift
+        cosmology: Planck15_lal
+        multiprocess: 4
+        redshift: exact
+        regenerate posteriors:
+        - redshift
+        - mass_1_source
+        - mass_2_source
+        - chirp_mass_source
+        - total_mass_source
+        - final_mass_source
+        - final_mass_source_non_evolved
+        - radiated_energy
+        skymap samples: 2000

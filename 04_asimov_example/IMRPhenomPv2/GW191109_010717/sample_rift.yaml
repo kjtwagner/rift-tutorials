@@ -1,0 +1,24 @@
+kind: analysis
+name: Bayeswave
+pipeline: bayeswave
+comment: Bayeswave on-source PSD estimation job
+---
+kind: analysis
+name: rift-IMRPhenomPv2
+status: Ready
+pipeline: RIFT
+needs:
+- Bayeswave
+event: GW191109_010717
+waveform:
+  approximant: IMRPhenomPv2
+comment: This is a sample RIFT analysis
+likelihood:
+  start frequency: 10
+  psd fractional overlap: 0.5
+  psd length: 32
+  psd maximum duration: 1024
+  psd method: median
+  reference frequency: 10
+scheduler:
+  osg: true
