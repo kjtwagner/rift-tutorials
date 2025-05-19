@@ -1,0 +1,125 @@
+\documentclass{article}
+\usepackage{geometry, hyperref, minted,xcolor,setspace}
+\usepackage{animate}
+\geometry{margin=1in}
+\usepackage{graphicx} % Required for inserting images
+
+\title{RIFT Tutorial \\
+\large 02: Cluster \& Environment Setup}
+\author{Katelyn J. Wagner}
+\date{}
+
+\begin{document}
+\setstretch{1.25}
+\maketitle
+
+%\section{Introduction}
+
+RIFT, \textbf{R}apid parameter inference on gravitational wave source via \textbf{I}terative \textbf{F}i\textbf{T}ting, is a parameter estimation pipeline that aims to recover source parameters for coalescing compact binary sources. This tool is highly parallelizable and uses iterative processes to rapidly converge on the parameters of many types of binaries. 
+
+\section*{Technical Setup}
+%\subsection{Synthetic Data}
+
+The LVK generously provides computing resources for member groups though the \href{https://computing.docs.ligo.org/guide/computing-centres/ldg/}{LIGO Data Grid}. Access to cluster computing is necessary for the following tutorial. Begin by signing into the cluster - we recommend CIT (Caltech). You can SSH into the general grid and select your cluster/machine:
+\begin{minted}[frame=single,obeytabs=true,tabsize=4,linenos,numbersep=-10pt]{bash}
+    ssh albert.einstein@ssh.ligo.org
+\end{minted}
+or choose your machine at SSH:
+\begin{minted}[frame=single,obeytabs=true,tabsize=4,linenos,numbersep=-10pt]{bash}
+    ssh albert.einstein@ldas-grid.ligo.caltech.edu
+\end{minted}
+Here, replace \texttt{albert.einstein} with your \texttt{first.last} credentials. When you sign on, you should see an \texttt{IGWN} environment activated, i.e. your bash will look something like:
+\begin{minted}[frame=single,obeytabs=true,tabsize=4,linenos,numbersep=-10pt]{bash}
+    (igwn) [albert.einstein@ldas-pcdev3 ~]$
+\end{minted}
+This conda environment is typically activated for all users by default and (which can be changed by adding a file called \texttt{.noigwn} and then logging back in) and contains some latest stable set of packages and versions that have been approved for use. \href{https://computing.docs.ligo.org/conda/environments/}{See more} about this here. For now, you can deactivate this environment with \texttt{conda deactivate}. Now we will use \texttt{mamba} to create a conda virtual environment that you will use for your work. Using something like a virtual or conda environment gives the user an isolated development environment where they have full control over the packages contained within it. 
+To begin, create a conda environment:
+% \begin{minted}[frame=single,obeytabs=true,tabsize=4,linenos,numbersep=-10pt]{bash}
+%     python3 -m venv YOUR_VENV
+%     conda deactivate
+%     source YOUR_ENV/bin/activate
+% \end{minted}
+\begin{minted}[frame=single,obeytabs=true,tabsize=4,linenos,numbersep=-10pt]{bash}
+    mamba create --clone igwn-py310 --name YOUR_ENV
+    conda activate YOUR_ENV
+\end{minted}
+
+\clearpage
+This created a conda environment called "YOUR\_ENV" and activated it. It creates a copy of the existing \texttt{igwn-py310} environment, giving it a new name (YOUR\_ENV). You're effectively cloning an existing conda environment using mamba, which is just a faster drop-in replacement for conda. Your bash should now look something like the following:
+\begin{minted}[frame=single,obeytabs=true,tabsize=4,linenos,numbersep=-10pt]{bash}
+    (YOUR_ENV) [albert.einstein@ldas-pcdev3 ~]$
+\end{minted}
+Now that your development environment is ready, you will need a copy of the RIFT repository. 
+%It is recommended to use the forking workflow. 
+% \begin{figure}[h!]
+%     \centering
+%     \includegraphics[width=0.15\linewidth]{fork.png}
+%     \label{fig:fork}
+% \end{figure}
+% Navigate to the \href{https://git.ligo.org/rapidpe-rift/rift}{RIFT repository}, hosted on GitLab, and make a fork by clicking the button that looks like the one above and filling in the necessary information. Copy the url for \textit{\textbf{your fork}}, which should include your \texttt{first.last} username. Then, clone the repository so you have a local copy on the cluster and add the necessary upstream so you can pull in changes. This is primarily relevant if you intend to do any RIFT development.
+% \begin{minted}[frame=single,obeytabs=true,tabsize=4,linenos,numbersep=-10pt]{bash}
+%     cd YOUR_ENV 
+%     git clone <url> 
+%     cd rift 
+%     git remote add upstream https://git.ligo.org/rapidpe-rift/rift.git 
+%     git fetch upstream
+%     git checkout -b YOUR_BRANCH upstream/rift_O4c
+% \end{minted}
+
+\begin{minted}[frame=single,obeytabs=true,tabsize=4,linenos,numbersep=-10pt]{bash}
+    cd ~/.conda/envs/YOUR_ENV 
+    mkdir src
+    cd src
+    git clone https://github.com/oshaughn/research-projects-RIT.git
+\end{minted}
+
+The RIFT repository is kept in two places, one on GitLab and one on GitHub. This is the GitHub version, which tends to see changes to the source code first. You want to check out a branch to track \texttt{upstream/rift\_O4c} since that is where the most up to date scripts live that you will use. Then, install the necessary dependencies:
+% \begin{minted}[frame=single,obeytabs=true,tabsize=4,linenos,numbersep=-10pt]{bash}
+%     cd YOUR_FORK
+%     python -m pip install -r requirements.txt
+%     python -m pip install pycbc
+% \end{minted}
+
+\begin{minted}[frame=single,obeytabs=true,tabsize=4,linenos,numbersep=-10pt]{bash}
+    cd research-projects-RIT
+    git checkout rift_O4c
+    pip install -e .
+\end{minted}
+
+You will also have to set a few environment variables and paths before you begin. Later when you build a RIFT run directory, some of these will be accessed by the computing grid submit files. To set these variables in bulk, create a file called \texttt{setup.sh} using your favorite text editor. This script should contain the following:
+
+\begin{minted}[frame=single,obeytabs=true,tabsize=4,linenos,numbersep=-10pt,breaklines]{bash}
+# User specific aliases and functions 
+HOME=/home/alber.einstein
+export LIGO_ACCOUNTING=ligo.sim.o4.cbc.pe.rift
+export LIGO_USER_NAME=alber.einstein
+CUDA_VER=11.2
+export LD_LIBRARY_PATH=/usr/local/cuda-${CUDA_VER}/lib64/
+export CUDA_PATH=/usr/local/cuda-${CUDA_VER}
+export CUDA_DIR=/usr/local/cuda-${CUDA_VER}
+export SINGULARITY_RIFT_IMAGE=/cvmfs/singularity.opensciencegrid.org/james-clark/
+research-projects-rit/rift:test
+export SINGULARITY_BASE_EXE_DIR=/usr/local/bin/
+export RIFT_REQUIRE_GPUS='(DeviceName=!="Tesla K10.G1.8GB")&&(DeviceName=!="Tesla K10.G2.8GB")&&(DeviceName=!="Tesla K20Xm")'
+export RIFT_AVOID_HOSTS=`cat /home/richard.oshaughnessy/igwn_feedback/rift_avoid_hosts.txt  | tr '\n' , | head -c -1`
+export NUMBA_CACHE_DIR=/tmp
+export RIFT_GETENV=LD_LIBRARY_PATH,PATH,PYTHONPATH,*RIFT*,LIBRARY_PATH
+export RIFT_GETENV_OSG=NUMBA_CACHE_DIR,*RIFT*
+\end{minted}
+
+\textbf{NOTE:} The steps up until this point only need to be performed the first time you set up your RIFT directory and environment, unless you wish to create a fresh install.
+
+%Note that your \texttt{PYTHONPATH} should be all one line, with no spaces. Once you've created this file, run \texttt{source setup.sh}. You may need to add certain variables if you intend to do further work, for example 
+Some of these variables are for using the OSG. You may also need to add additional variables for accessing and using external waveforms (such as \texttt{TEOBResumS} or numerical relativity waveforms), but check with someone in the group for more information. 
+Setting your path specifies a particular set of directories where your executable files are located. RIFT uses these paths to locate the appropriate scripts, since many of the relate to or import each other. 
+
+\textbf{You must source your environment and your setup script each time you wish to do any RIFT-related tasks}. If you wish, this can be done in one step by adding the following lines to the top of your \texttt{setup.sh} script:
+
+\begin{minted}[frame=single,obeytabs=true,tabsize=4,linenos,numbersep=-10pt]{bash}
+    #!/bin/bash
+    conda activate YOUR_ENV
+\end{minted}
+
+and then source your setup script each time you login as usual with [\texttt{source setup.sh}], to activate your environment \textit{and} set your paths.
+
+\end{document}
