@@ -1,0 +1,64 @@
+kind: analysis
+name: Bayeswave
+pipeline: bayeswave
+comment: Bayeswave on-source PSD estimation job
+---
+kind: analysis
+name: rift-IMRPhenomPv2
+status: Ready
+pipeline: RIFT
+needs:
+- Bayeswave
+event: GW191222_033537
+waveform:
+  approximant: IMRPhenomPv2
+comment: This is a sample RIFT analysis
+likelihood:
+  start frequency: 10
+  psd fractional overlap: 0.5
+  psd length: 8
+  psd maximum duration: 1024
+  psd method: median
+  reference frequency: 10
+scheduler:
+  osg: true
+---
+kind: analysis
+name: rift-SEOBNRv4PHM
+status: Ready
+pipeline: RIFT
+needs:
+- Bayeswave
+event: GW191222_033537
+waveform:
+    approximant: SEOBNRv4PHM
+comment: This is a sample RIFT analysis
+likelihood:
+    start frequency: 10
+    psd maximum duration: 10000
+    reference frequency: 10
+scheduler:
+    osg: true
+---
+kind: analysis
+name: rift-SEOBNRv5PHM
+status: Ready
+pipeline: RIFT
+needs:
+- Bayeswave
+event: GW191222_033537
+waveform:
+    approximant: SEOBNRv5PHM
+comment: This is a sample RIFT analysis
+likelihood:
+    start frequency: 10
+    psd maximum duration: 10000
+    reference frequency: 10
+    assume: precessing
+scheduler:
+    osg: true
+sampler:
+    ile:
+        request disk: "25M"
+        manual extra args:
+            - --use-gwsignal
