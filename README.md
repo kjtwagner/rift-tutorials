@@ -10,4 +10,4 @@ Read the [documentation](https://rift-documentation.readthedocs.io/en/latest/ind
 - Rapid and accurate parameter inference for coalescing, precessing compact binaries[[arXiv:1805.10457]](https://arxiv.org/abs/1805.10457)
 - Accelerating parameter inference with graphics processing units [[1902.04934]](https://arxiv.org/abs/1902.04934)
 - Expanding RIFT: Improving performance for GW parameter inference [[2210.07912]](https://arxiv.org/abs/2210.07912)
-- Narrowing RIFT: Focused simulation-based-inference for interpreting exceptional GW sources 
+- Narrowing RIFT: Focused simulation-based-inference for interpreting exceptional GW sources [[2505.11655]](https://arxiv.org/abs/2505.11655)

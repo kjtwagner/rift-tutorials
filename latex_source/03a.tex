@@ -5,7 +5,7 @@
 \usepackage{graphicx} % Required for inserting images
 
 \title{RIFT Tutorial \\
-\large 03: Generating a RIFT directory for real data}
+\large 03a: Generating a RIFT directory for a real BBH}
 \author{Katelyn J. Wagner}
 \date{}
 
@@ -35,10 +35,23 @@ The ini files contain the settings used for production PE, and the main informat
 Make sure to modify the items mentioned above, as well as any other RIFT specific settings, such as waveform approximation, spin settings, etc. 
 
 \newpage
-Now, get the \texttt{coinc.xml} by checking GraceDB for the GID of your event. The superevent ID (SID) in GraceDB corresponds to the date of the event, and you can get the GID from the SID page (as long as you are logged in with your LIGO credentials). Then, on the command line, you can download the \texttt{coinc.xml}:
+Now, get the \texttt{coinc.xml} by checking GraceDB for the GID of your event. The superevent ID (SID) in GraceDB corresponds to the date of the event, and you can get the GID from the SID page (as long as you are logged in with your LIGO credentials). Then, on the command line, you can download the \texttt{coinc.xml}. First, run the following command:
 
 \begin{minted}[frame=single,obeytabs=true,tabsize=4,linenos,numbersep=-10pt,breaklines]{bash}
-    ligo-proxy-init albert.einstein
+    htgettoken -a vault.ligo.org -i igwn
+\end{minted}
+
+This will provide you a browser link to complete the authentication. Copy and paste the output link into your browser and log in. Return to your terminal to continue. You should see some output like:
+
+\begin{minted}[frame=single,obeytabs=true,tabsize=4,linenos,numbersep=-10pt,breaklines]{bash}
+    Storing vault token in /tmp/<rand>
+    Saving credkey to /home/albert.einstein/.config/htgettoken/credkey-igwn-default
+    Saving refresh token ... done
+\end{minted}
+
+There is now an autheitcation token associated with your albert.einstein account and the following commands will work.
+
+\begin{minted}[frame=single,obeytabs=true,tabsize=4,linenos,numbersep=-10pt,breaklines]{bash}
     gracedb get file G333631 coinc.xml coinc.xml
     ligolw_no_ilwdchar coinc.xml
 \end{minted}
@@ -62,6 +75,7 @@ Once the run directory is created, check a \texttt{command-single.sh} and then s
     cd rundir/
     ./command_single.sh
 \end{minted}
+\newpage
 There will be a bunch of output, but once you see output like the following, you know the job will run on the cluster:
 \begin{figure}[h!]
     \centering
