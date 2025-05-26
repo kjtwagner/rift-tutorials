@@ -33,7 +33,7 @@ This calls out to GraceDB, the open GW data web storage, to retrieve this file w
 ```
 make psds
 ```
-This will make a psd directory, download them from online (the dcc, for now), and convert them to the appropriate format for RIFT. Finally, you're ready to build the run directory. Use tab complete, but the command is:
+This will make a psd directory, download them from online (the dcc, for now), and convert them to the appropriate format for RIFT. Finally, you're ready to build the run directory. Before you run the following command, make sure you open the ini file and change the `accounting_group_user` to your own. Use tab complete, but the command is:
 ```
 make rundir_GW170817_knownhost_inclprior_DiColambda-2
 ```
