@@ -1,6 +1,6 @@
 # RIFT tutorials
 
-Tutorials for the Rapid parameter Inference on gravitational wave sources via Iterative Fitting (RIFT) pipeline. These are meant to be interactive exercises to help new users learn the basics of using the pipeline. The tutorial is currently intended for users who have access to the IGWN computing resources, in particular the LIGO Data Grid (LDG).
+Tutorials for the Rapid parameter Inference on gravitational wave sources via Iterative Fitting (RIFT) pipeline. `git clone` this repo to use it as a workspace (particularly for 03b). These are meant to be interactive exercises to help new users learn the basics of using the pipeline. The tutorial is currently intended for users who have access to the IGWN computing resources, in particular the LIGO Data Grid (LDG).
 
 Available as [RIFT via pypi](https://pypi.org/project/RIFT/) and [github](https://github.com/oshaughn/research-projects-RIT)
 
