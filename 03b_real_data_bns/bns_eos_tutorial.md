@@ -3,7 +3,17 @@ Setting up a RIFT run for real data is more straightforward once you have your e
 RIFT was originally developed to perform parameter inference on binary black hole (BBH) mergers, but it has since been extended to include binary neutron star (BNS) sources. For BNS systems, users can incorporate external likelihoods and priors specific to neutron star physics. I can model tidal deformability parameters ($\lambda_1, \lambda_2$), which offer insight into the internal structure of neutron stars and help constrain the nuclear equation of state (EOS). This makes RIFT a powerful tool for multi-messenger astrophysics and nuclear physics studies.
 
 ### Building the run directory
-First, to build the run directory, you need to authenticate your username to be able to download data from onlilne. Run the following command:
+For this event, we use an external supplementary prior. These functions are contained in an external script called `external_prior_example.py`. You must put the external prior file into a place where RIFT can find it. To do this, you can add the current directory to your `PYTHONPATH`. Setting the `PYTHONPATH` environment variable tells Python where to look for modules and packages that aren't in the standard library or  working directory. It’s useful when you want to import code from other directories in your project without installing it as a package, and is particularly important when you submit local jobs to HTCondor.  Before you source your setup scrupt, open it (`setup.sh`), and add the following line anywhere after your `conda activate`, if it's present:
+```
+export PYTHONPATH=/home/albert.einstein/PATH_TO_PRIOR/:${PYTHONPATH}
+```
+where `PATH_TO_PRIOR` is a placeholder that represents the location you have this repository checked out. You can find this place by running `pwd` in the directory where this tutorial file is located. For example, the author's path would be `/home/katelyn.wagner/rift-tutorials/03b_real_data_bns/`, so the `PYTHONPATH` variable would be:
+```
+export PYTHONPATH=/home/katelyn.wagner/rift-tutorials/03b_real_data_bns/:${PYTHONPATH}
+```
+Once the line is properly added according to *your* paths, you can source your env and setup script as usual. Then, `cd` into your `/rift-tutorials/03b_real_data_bns/` folder.
+
+Next, to build the actual run directory, you need to authenticate your username to be able to download data from online. Run the following command:
 
 ```
 htgettoken -a vault.ligo.org -i igwn
@@ -41,9 +51,7 @@ This calls our internal pipeline builder, a script called `util_RIFT_pseduo_pipe
 
 HTCondor submit files define how to run individual jobs on a computing cluster, specifying the executable, arguments, and input/output files. For our workflow, a DAG (Directed Acyclic Graphs) is used to manage dependencies between multiple jobs, ensuring they run in the correct order. DAGs make it easy to chain together and/or parallelize stages.
 
-Once the `rundir...` appears, `cd` into it and take a few minutes to look through the files. The final step before testing the workflow is to put the external prior file into a place where RIFT can find it. In your `ILE.sub`, there is an "executable" line. There is a path to a script called `integrate_likelihood_extrinsic_batchmode`. You need to copy the `external_prior_example.py` into that same directory. Once you've done this, return to your rundir.
-
-With your env and setup script (still) sourced, run
+Once the `rundir...` appears, `cd` into it and take a few minutes to look through the files. Then, with your env and setup script (still) sourced, run
 ```
 ./command-single.sh
 ```
