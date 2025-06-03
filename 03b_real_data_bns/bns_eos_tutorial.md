@@ -79,11 +79,16 @@ Once your run completes, you can make corner plots to assess the accuracy of the
 
 You must specify the posterior files you want to plot and the parameters you wish to include. You may also choose to plot the posterior samples generated from the final extrinsic recovery step. To do this, you need to change the parameters specified and the name of the posterior file containing the appropriate samples.
 ```
-   plot_posterior_corner.py --parameter mc --parameter q --parameter xi --parameter LambdaTilde  --posterior-label 0 --posterior-file posterior_samples-1.dat
-   --posterior-label 1 --posterior-file posterior_samples-2.dat  --posterior-label 2 --posterior-file posterior_samples-3.dat --posterior-label 3 --posterior-file posterior_samples-4.dat
-   --composite-file all.net --use-all-composite-but-grayscale --lnL-cut 20 --ci-list [0.9] --quantiles None
-   --flag-tides-in-composite --use-legend 
+   plot_posterior_corner.py --parameter mc --parameter q --parameter xi --parameter LambdaTilde
+   --posterior-label 0 --posterior-file posterior_samples-1.dat
+   --posterior-label 1 --posterior-file posterior_samples-2.dat
+   --posterior-label 2 --posterior-file posterior_samples-3.dat
+   --posterior-label 3 --posterior-file posterior_samples-4.dat
+   --composite-file all.net --use-all-composite-but-grayscale --lnL-cut 20 --ci-list [0.9]
+   --quantiles None --flag-tides-in-composite --use-legend 
 ```
+You can include whichever parameters from the posterior file you'd like, by specifying them after `--parameter`. You can also include up to as many posterior files as you have available with labels in a legend, using pairs of `--posterior-label`/`--posterior-file`.
+
 You can view the plots by navigate to `/home/albert.einstein/public_html/` and making a symbolic link to your run directory using `ln -s <PATH_TO_RUNDIR>`. Then, go to `https://ldas-jobs.ligo.caltech.edu/~albert.einstein` to view your files.
 
 For more info about this event, in particular using RIFT with matter settings, see the following relevant papers:
