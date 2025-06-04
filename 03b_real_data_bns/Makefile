@@ -24,7 +24,7 @@ psds: Makefile
 	convert_psd_ascii2xml --fname-psd-ascii L1-psd.dat --ifo L1 --conventional-postfix; \
 	convert_psd_ascii2xml --fname-psd-ascii V1-psd.dat --ifo V1 --conventional-postfix; )
 
-rundir_GW170817_knownhost_inclprior_DiColambda-2:
+rundir_GW170817:
 	util_RIFT_pseudo_pipe.py --use-ini `pwd`/GW170817.ini --use-rundir `pwd`/$@ --use-coinc `pwd`/coinc.xml  --fake-data-cache `pwd`/local.cache
 	cp psds/*psd.xml.gz $@/
 
